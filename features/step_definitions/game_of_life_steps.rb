@@ -1,6 +1,7 @@
 Given(/^the following setup$/) do |table|
   # table is a Cucumber::Ast::Table 
   @table_req = table
+  #create custom table
 end
 
 When(/^I evolve the board$/) do
