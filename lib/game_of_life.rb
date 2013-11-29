@@ -22,7 +22,7 @@ class Grid
   end
 
   def evolve
-    @cells.each { |cell| cell.next_state }
+    @cells.each { |cell| cell.nextState }
     @cells.each { |cell| cell.evolve }
   end
 
@@ -40,12 +40,14 @@ class Grid
 
   def raw
     order = Math.sqrt(@cells.length)
-    raw_grid = Array.new(order, Array.new(order))
-    @cells.each_with_index { |cell, i| 
+    order_h = order.ceil
+    order_v = order.floor
+    raw_grid = Array.new(order_v) { Array.new(order_h) }
+    @cells.each_with_index { |cell, i|
       if cell.isAlive? 
-        raw_grid[i/order][i%order] = "x"
+        raw_grid[i/order_h][i%order_h] = "x"
       else 
-        raw_grid[i/order][i%order] = "."
+        raw_grid[i/order_h][i%order_h] = "."
       end
     }
     return raw_grid
@@ -55,10 +57,14 @@ end
 
 class Cell
 
-  attr_accessor :aliv, :next_state, :position, :neighbors
+  attr_accessor :alive, :next_state, :position, :neighbors
 
   def initialize(state, position)
-    state == "." ? @aliv = :dead : @aliv = :alive
+    if state == "."
+      @alive = false
+    else
+      @alive = true
+    end
     @position = position
     @neighbors = []
   end
@@ -71,23 +77,23 @@ class Cell
     count = @neighbors.select{ |cell| cell.isAlive? }.count
     if isAlive?
       if count < 2               #rule 1       
-        @next_state = :dead 
-      elsif count.between(2,3)   #rule 2
-        @next_state = :alive
+        @next_state = false
+      elsif count.between?(2,3)  #rule 2
+        @next_state = true
       else                       #rule 3 (count > 3)
-        @next_state = :dead
+        @next_state = false
       end
     else
       if count == 3              #rule 4
-        @next_state = :alive
+        @next_state = true
       else
-        @next_state = :dead
+        @next_state = false
       end
     end
   end
 
   def evolve
-    @aliv = @next_state
+    @alive = @next_state
   end
 
   def position
@@ -95,7 +101,17 @@ class Cell
   end
 
   def isAlive?
-    return @aliv == :alive
+    return @alive
+  end
+
+  def to_s
+    str =  "Cell: position (#{@position[0]}, #{@position[1]}), is alive? #{@alive}, neighbors position "
+    unless @neighbors.empty?
+      @neighbors.each { |cell| str = str + "(#{cell.position[0]}, #{cell.position[1]}), "}
+      return str[0,str.length - 2]
+    else
+      return str[0,str.length - 21]
+    end
   end
 
 end 
