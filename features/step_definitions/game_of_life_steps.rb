@@ -1,22 +1,20 @@
 Given(/^the following setup$/) do |table|
   # table is a Cucumber::Ast::Table 
-  @table_req = table
-  #create custom table
+  @grid = Grid.new(table.raw)
 end
 
 When(/^I evolve the board$/) do
-  pending # express the regexp above with the code you wish you had
+  @grid.evolve
 end
 
 Then(/^the center cell should be dead$/) do
-  pending # express the regexp above with the code you wish you had
+  @grid.isCenterAlive?.should eq false 
 end
 
 Then(/^the center cell should be alive$/) do
-  pending # express the regexp above with the code you wish you had
+  @grid.isCenterAlive?.should eq true
 end
 
 Then(/^I should see the following board$/) do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
+  @grid.raw.should eq table.raw
 end
