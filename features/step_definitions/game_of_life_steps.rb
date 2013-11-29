@@ -8,11 +8,11 @@ When(/^I evolve the board$/) do
 end
 
 Then(/^the center cell should be dead$/) do
-  @grid.isCenterAlive?.should eq false 
+  @grid.is_center_alive?.should eq false 
 end
 
 Then(/^the center cell should be alive$/) do
-  @grid.isCenterAlive?.should eq true
+  @grid.is_center_alive?.should eq true
 end
 
 Then(/^I should see the following board$/) do |table|
